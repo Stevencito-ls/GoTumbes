@@ -1,59 +1,83 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📘 Documentación Técnica y Funcional: Proyecto "GoTumbes"
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Esta documentación detalla la arquitectura, tecnologías y funcionalidades del sistema **GoTumbes**, una plataforma web moderna diseñada para la gestión y reserva de experiencias turísticas en la región de Tumbes, Perú.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 1. Stack Tecnológico (Tecnologías Utilizadas)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+El proyecto ha sido desarrollado utilizando un stack moderno, priorizando la escalabilidad, la velocidad y la seguridad a través de tecnologías Serverless y frameworks de vanguardia.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend (Lógica de Servidor):** [Laravel 11](https://laravel.com/) (PHP)
+- **Frontend (Diseño y UI):** [Tailwind CSS](https://tailwindcss.com/) compilado mediante Vite.js, complementado con Vanilla JavaScript para micro-interacciones (ej. Skeleton Loaders).
+- **Base de Datos (NoSQL):** [Google Firebase - Firestore](https://firebase.google.com/docs/firestore), base de datos en tiempo real en la nube. **No se utilizan bases de datos locales tradicionales (MySQL/PostgreSQL)**.
+- **Autenticación:** [Firebase Authentication](https://firebase.google.com/docs/auth), gestionando el login, registro y recuperación de contraseñas de forma segura.
+- **Generación de Reportes:** `barryvdh/laravel-dompdf` para la creación instantánea de vouchers en formato PDF.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🎨 2. Diseño e Interfaz (UI/UX)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Modo Oscuro Elegante (Dark Theme):** Diseño centrado en fondos oscuros (`bg-slate-900`) con contrastes en color verde azulado (`teal-400` / `emerald-400`), transmitiendo una sensación premium, aventurera y confiable.
+- **Efectos Glassmorphism:** Uso de paneles translúcidos con desenfoque (backdrop-blur) en barras de navegación y tarjetas de presentación.
+- **Skeleton Loaders:** Para evitar pantallas blancas (congeladas) cuando el internet es lento, la sección del catálogo muestra animaciones de "carga fantasma" (esqueletos) mientras consulta los datos de Google Cloud, mejorando radicalmente la percepción de velocidad.
+- **Prevención de Errores de Usuario (UX):** Los botones críticos (como "Confirmar Pago") cambian a un estado de carga y se bloquean al presionarse, previniendo que clientes impacientes envíen la misma reserva múltiples veces.
+- **Comunicación Rápida:** Botón flotante persistente de WhatsApp configurado directamente con el número de la agencia.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## ⚙️ 3. Arquitectura del Sistema
 
-### Premium Partners
+- **Arquitectura MVC (Modelo-Vista-Controlador):** Patrón de diseño nativo de Laravel.
+- **Inyección de Dependencias (Service Layer):** Toda la comunicación pesada con la base de datos de Google se ha abstraído en un `FirebaseService`, centralizando el código para hacerlo más limpio, profesional y fácil de escalar por cualquier ingeniero.
+- **Gestión de Roles (Middleware):** Un sistema de seguridad personalizado (`is_admin`) intercepta las rutas y verifica en la nube si el usuario conectado posee privilegios administrativos antes de dejarlo pasar a los paneles de control.
+- **Caché Optimizado:** Las métricas de administrador realizan peticiones pesadas a Firestore. Se implementó `Cache::remember()` de Laravel para guardar estos resultados por 60 segundos, ahorrando cientos de lecturas a la base de datos y reduciendo drásticamente los costos de Google Cloud.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 🎯 4. Funcionalidades Principales
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+El sistema se divide en dos grandes áreas: **Área Pública (Turistas)** y **Área Administrativa (Agencia)**.
 
-## Code of Conduct
+### 🙎‍♂️ A. Área Pública (Para Turistas y Clientes)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. **Landing Page Interactiva:** 
+   - Banner principal (Hero) con video de fondo en alta calidad.
+   - Presentación de la marca, propuesta de valor y rutas principales.
+2. **Catálogo Dinámico de Destinos:**
+   - Consume en tiempo real los tours disponibles desde la base de datos Firestore a través de una API interna.
+   - Muestra precios, fotos dinámicas y títulos amigables.
+3. **Página de Detalles del Destino:**
+   - Muestra información extensa (cupos, descripciones, recomendaciones).
+   - **SEO Avanzado:** Cuenta con etiquetas *Open Graph* integradas, lo que permite que al compartir el enlace del tour por WhatsApp o Facebook, se genere una tarjeta visual con la foto y el título del viaje.
+4. **Sistema de Checkout y Reservas (Modelo Yape/Plin):**
+   - El turista elige cuántos tickets desea comprar, y el sistema calcula en tiempo real el monto total.
+   - **Formulario adaptado:** En lugar de pasarelas de tarjeta de crédito, muestra instrucciones para transferir vía Yape o Plin.
+   - El usuario selecciona la **Fecha del Tour**, su **Método de Pago** y registra el **Número de Operación**.
+5. **Generador de Vouchers PDF:**
+   - Una vez realizada la solicitud, el sistema emite automáticamente un comprobante PDF descargable, etiquetado en naranja como "PENDIENTE DE VALIDACIÓN", sirviendo como garantía para el cliente.
+6. **Autenticación (Login/Registro):**
+   - Sistema de cuentas personales. Los usuarios pueden crear su cuenta con su correo electrónico, gestionado por la seguridad de Firebase.
 
-## Security Vulnerabilities
+### 💼 B. Área Administrativa (Panel de Control de la Agencia)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Acceso restringido únicamente a dueños o empleados autorizados.
 
-## License
+1. **Dashboard y Estadísticas Inteligentes:**
+   - Gráficos y tarjetas que muestran el "Total de Reservas" y el "Total de Ingresos".
+   - *Lógica de Contabilidad Exacta:* Los ingresos totales ignoran las reservas pendientes o rechazadas; **solo suman el dinero que la agencia ya validó como "Aprobado" (Pagado).**
+2. **Gestor de Reservas (Validación de Pagos):**
+   - Tabla completa con el historial de todos los clientes, números de operación, método de pago y fecha del tour.
+   - **Flujo de Aprobación:** Botones rápidos de "Aprobar" (✅) o "Rechazar" (❌) que actualizan el estatus del cliente en tiempo real en la nube.
+   - Acceso al Voucher PDF de cada reserva.
+3. **Gestor de Catálogo (CRUD de Destinos):**
+   - El administrador puede Crear, Editar y Eliminar los destinos turísticos, ajustar los precios y descripciones sin tocar el código fuente. Las modificaciones impactan inmediatamente la web pública.
+4. **Gestor de Usuarios y Roles:**
+   - Visualización de todas las personas registradas en la web.
+   - Capacidad para ascender a cualquier turista o empleado al rol de "Administrador", otorgándole acceso a los paneles de control.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 📈 5. Conclusión y Viabilidad del Proyecto
+
+GoTumbes es un proyecto de software robusto, con un alto grado de pulido visual y arquitectónico. Al no depender de servidores SQL locales y utilizar la infraestructura de Firebase, posee alta disponibilidad y es invulnerable a caídas típicas de tráfico, convirtiéndolo en una solución corporativa "Nivel 10/10", lista para operar y recibir clientes masivos.
